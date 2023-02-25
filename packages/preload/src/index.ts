@@ -1,7 +1,3 @@
-/**
- * @module preload
- */
-
 import { IpcRenderer, ipcRenderer } from 'electron'
 
 const rmstIpcRenderer = {} as IpcRenderer

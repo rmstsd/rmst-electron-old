@@ -8,7 +8,7 @@ type IElectronWindow = {
 }
 export const electronWindow: IElectronWindow = {} as IElectronWindow
 
-const isDev = false
+const isDev = import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL !== undefined
 
 const preloadPath = path.join(app.getAppPath(), 'packages/preload/dist/index.cjs')
 export const iconPath = path.resolve(app.getAppPath(), 'icon.png')
@@ -16,10 +16,9 @@ export const iconPath = path.resolve(app.getAppPath(), 'icon.png')
 const loadWindow = (win: BrowserWindow, query: Record<string, string>) => {
   const queryString = new URLSearchParams(query).toString()
 
-  const pageUrl =
-    import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL !== undefined
-      ? `${import.meta.env.VITE_DEV_SERVER_URL}?${queryString}`
-      : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
+  const pageUrl = isDev
+    ? `${import.meta.env.VITE_DEV_SERVER_URL}?${queryString}`
+    : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString() + '?' + queryString
 
   win.loadURL(pageUrl)
 }

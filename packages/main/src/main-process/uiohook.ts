@@ -1,4 +1,4 @@
-import { BrowserWindow, globalShortcut, screen } from 'electron'
+import { BrowserWindow, globalShortcut } from 'electron'
 import { uIOhook, UiohookKey } from 'uiohook-napi'
 
 import { electronWindow } from './electronWindow'

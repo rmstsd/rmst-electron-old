@@ -40,7 +40,7 @@ function App() {
         <div style={{ height: 5, position: 'fixed', left: 0, right: 0, zIndex: 5 }}></div>
       </Popover>
 
-      {Component && <Component />}
+      {Component ? <Component /> : '未匹配到组件'}
     </div>
   )
 }

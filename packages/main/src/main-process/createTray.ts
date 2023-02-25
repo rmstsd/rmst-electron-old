@@ -1,7 +1,6 @@
 import { Menu, app, Tray } from 'electron'
-import path from 'path'
 
-import { createSettingWindow, electronWindow, iconPath } from './electronWindow'
+import { electronWindow, iconPath } from './electronWindow'
 
 // 托盘图标
 export const createTray = () => {
