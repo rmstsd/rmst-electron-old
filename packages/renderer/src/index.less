@@ -1,0 +1,96 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  display: flow-root;
+}
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.win-drag {
+  -webkit-app-region: drag;
+}
+
+.tool-bar {
+  background-color: #fff;
+  padding: 5px;
+}
+.tool-bar-popover {
+  .arco-popover-content {
+    padding: 0;
+  }
+}
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .svg {
+    transition: all 0.3s;
+    transform: scale(0);
+    user-select: none;
+
+    .path {
+      transition: all 0.3s;
+      &:hover {
+        fill: #ddd;
+      }
+    }
+  }
+
+  .ani {
+    transform: scale(1);
+  }
+
+  .center {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    background-color: #c6e6ff;
+    border-radius: 50%;
+    cursor: move;
+  }
+}
+
+.s-res {
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px 10px #aaa;
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+}
+
+.ani-btn {
+  position: fixed;
+  left: 0;
+  z-index: 10;
+}
+
+.option-item {
+  &:hover {
+    color: #1d2129;
+    background-color: #f2f3f5;
+  }
+}
+
+.s-tipInfo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0 10px;
+  color: #777;
+  font-size: 18px;
+  border-left: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+}
