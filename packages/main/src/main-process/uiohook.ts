@@ -12,7 +12,7 @@ export const addUiohook = () => {
       BrowserWindow.getFocusedWindow()?.webContents.openDevTools({ mode: 'detach' })
     }
     if (evt.keycode === UiohookKey.F5) {
-      BrowserWindow.getFocusedWindow()?.hide()
+      BrowserWindow.getFocusedWindow()?.webContents.reloadIgnoringCache()
     }
     if (evt.keycode === UiohookKey.Escape) {
       BrowserWindow.getFocusedWindow()?.hide()
