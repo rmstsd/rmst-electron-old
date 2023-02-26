@@ -13,3 +13,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </ConfigProvider>
   </BrowserRouter>
 )
+
+document.addEventListener('input', evt => {
+  const target = evt.target as HTMLElement
+
+  if (target.tagName === 'INPUT') {
+    target.setAttribute('spellcheck', 'false')
+  }
+})
