@@ -4,10 +4,15 @@ import { useEffect, useState } from 'react'
 import { rmstIpcRenderer } from '#preload'
 
 const Setting = () => {
-  const [editorPath, setEditorPath] = useState<string>(undefined)
+  const [editorPath, setEditorPath] = useState<string>('')
   const [dirPaths, setDirPaths] = useState<string[]>([])
 
   const saveSet = () => {
+    if (!editorPath || dirPaths.length === 0 || dirPaths.some(item => !item)) {
+      Message.error('不能为空')
+      return
+    }
+
     rmstIpcRenderer.send('set-editorPath', editorPath)
     rmstIpcRenderer.send('set-dirPaths', dirPaths)
 
@@ -19,7 +24,7 @@ const Setting = () => {
       if (data) setEditorPath(data)
     })
     rmstIpcRenderer.invoke('get-dirPaths').then(data => {
-      if (data) setDirPaths(data)
+      if (Array.isArray(data) && data.length) setDirPaths(data)
     })
   }, [])
 
@@ -41,11 +46,17 @@ const Setting = () => {
         onChange={setEditorPath}
       />
 
-      <h3>项目所在的目录</h3>
+      <h3>
+        项目所在的目录
+        <span style={{ fontWeight: 'normal', marginLeft: 10 }}>
+          (如果你的所有项目都在 E:\project 下 则可以填写 E:\project)
+        </span>{' '}
+      </h3>
       {dirPaths.map((item, index) => (
         <Space key={index} style={{ display: 'flex', marginBottom: 10 }}>
+          <span>{index + 1}:</span>
           <Input
-            placeholder="路径 从我的电脑-地址栏复制"
+            placeholder="例如: E:\project"
             type="text"
             value={item}
             style={{ width: 400 }}
@@ -66,16 +77,20 @@ const Setting = () => {
       ))}
 
       <Button onClick={() => setDirPaths(dirPaths.concat(''))} style={{ marginBottom: 5 }}>
-        +
+        + 添加一个目录
       </Button>
 
-      <Button type="primary" onClick={saveSet} long>
-        保存
-      </Button>
+      <Divider />
 
-      <Button type="primary" status="danger" onClick={clearEleStore} style={{ marginTop: 10 }}>
-        清空本地缓存
-      </Button>
+      <div style={{ display: 'flex', gap: 10 }}>
+        <Button type="primary" onClick={saveSet} style={{ flexGrow: 1 }}>
+          保存
+        </Button>
+
+        <Button type="primary" status="danger" onClick={clearEleStore}>
+          清空本地缓存
+        </Button>
+      </div>
     </div>
   )
 }

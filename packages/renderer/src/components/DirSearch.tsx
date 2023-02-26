@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Input } from '@arco-design/web-react'
+import { Input, Message } from '@arco-design/web-react'
 import path from 'path-browserify'
 
 import { rmstIpcRenderer } from '#preload'
@@ -8,6 +8,7 @@ import classNames from 'classnames'
 import { defaultList } from '../utils'
 
 const dirSearch = () => {
+  const [isCanOpenDir, setIsCanOpenDir] = useState(false)
   const [wd, setWd] = useState('')
   const [dirNamesTree, setDirNamesTree] = useState<any[]>([])
   const [selectIndex, setSelectIndex] = useState(0)
@@ -15,27 +16,37 @@ const dirSearch = () => {
   const inputRef = useRef(null)
 
   useEffect(() => {
-    rmstIpcRenderer.send('set-dir-win-size', document.body.offsetHeight)
-  }, [wd])
-
-  useEffect(() => {
-    document.querySelector('.s-input').setAttribute('spellcheck', 'false')
-    inputRef.current.dom.focus()
+    getInitialData()
 
     document.onvisibilitychange = () => {
-      if (document.visibilityState == 'visible') {
-        inputRef.current.dom.focus()
-      }
+      if (document.visibilityState == 'visible') getInitialData()
     }
 
-    rmstIpcRenderer.invoke('project-names-tree').then(data => {
-      setDirNamesTree(data)
+    const ob = new ResizeObserver(() => {
+      rmstIpcRenderer.send('set-dir-win-size', document.body.offsetHeight)
     })
+    ob.observe(document.body)
 
     return () => {
       document.onvisibilitychange = null
+      ob.disconnect()
     }
   }, [])
+
+  const getInitialData = () => {
+    inputRef.current.dom.focus()
+
+    rmstIpcRenderer.invoke('project-names-tree').then(data => {
+      Array.isArray(data) && setDirNamesTree(data)
+    })
+
+    Promise.all([rmstIpcRenderer.invoke('get-editorPath'), rmstIpcRenderer.invoke('get-dirPaths')]).then(
+      ([editorPath, dirPaths]) => {
+        const isCan = Boolean(editorPath) && Array.isArray(dirPaths) && dirPaths.length !== 0
+        setIsCanOpenDir(isCan)
+      }
+    )
+  }
 
   const onConfirm = index => {
     if (searchUrl) {
@@ -45,8 +56,19 @@ const dirSearch = () => {
       return
     }
 
-    const dir = flatDirNames[index]
-    rmstIpcRenderer.send('spawn-open-dir', dir)
+    if (!isCanOpenDir) {
+      Message.info({
+        content: '请先点击托盘右键设置 编辑器路径 和 项目目录',
+        style: { top: -35 },
+        id: 'only-info'
+      })
+      return
+    }
+
+    const projectPath = flatDirNames[index]
+    if (!projectPath) return
+
+    rmstIpcRenderer.send('spawn-open-dir', projectPath)
 
     setWd('')
     setSelectIndex(0)
@@ -76,6 +98,7 @@ const dirSearch = () => {
       item.shortcutWd.map(o => o.toLowerCase()).includes(shortcutWd.toLowerCase())
     )
 
+    // 如果目的是搜索
     if (matchItem && wd.at(shortcutWd.length) === ' ') {
       const searchWd = wd.slice(shortcutWd.length + 1)
       const searchUrl = matchItem.searchLink + searchWd
@@ -87,7 +110,7 @@ const dirSearch = () => {
   })()
 
   return (
-    <div>
+    <div className="dir-search">
       <section style={{ position: 'relative' }}>
         <Input
           ref={inputRef}
