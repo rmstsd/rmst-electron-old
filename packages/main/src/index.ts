@@ -12,7 +12,10 @@ if (!isSingleInstance) {
   app.quit()
   process.exit(0)
 }
-app.on('second-instance', restoreOrCreateWindow)
+// app.on('second-instance', () => {
+//   console.log('第二个实例')
+//   restoreOrCreateWindow()
+// })
 
 /**
  * Disable Hardware Acceleration to save more system resources.
