@@ -51,6 +51,7 @@ const dirSearch = () => {
   const onConfirm = index => {
     if (searchUrl) {
       rmstIpcRenderer.send('open-external', searchUrl)
+      rmstIpcRenderer.send('hide-focused-win')
 
       setWd('')
       return
@@ -69,6 +70,7 @@ const dirSearch = () => {
     if (!projectPath) return
 
     rmstIpcRenderer.send('spawn-open-dir', projectPath)
+    rmstIpcRenderer.send('hide-focused-win')
 
     setWd('')
     setSelectIndex(0)

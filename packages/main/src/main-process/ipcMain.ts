@@ -8,6 +8,7 @@ import { electronWindow } from '../main-process/electronWindow'
 const store = new Store()
 
 export const addIpcMain = () => {
+  ipcMain.on('hide-focused-win', () => BrowserWindow.getFocusedWindow()?.hide())
   ipcMain.on('open-external', (event, url) => shell.openExternal(url))
   ipcMain.on('hide-circle-search-win', () => electronWindow.circleWindow?.hide())
 
@@ -27,8 +28,6 @@ export const addIpcMain = () => {
 }
 
 const openSpawnDir = (event, dirPath) => {
-  BrowserWindow.getFocusedWindow()?.hide()
-
   const editorPath = store.get('editorPath') as string
   if (!editorPath) {
     return
