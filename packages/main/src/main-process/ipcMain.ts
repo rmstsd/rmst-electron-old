@@ -32,7 +32,7 @@ const openSpawnDir = (event, dirPath) => {
   if (!editorPath) {
     return
   }
-  spawn(editorPath, [dirPath])
+  spawn(editorPath, [dirPath], { detached: true })
 }
 
 const setDirWinSize = (evt, value) => {

@@ -6,6 +6,19 @@ import { createSearchWindow, createSettingWindow } from './main-process/electron
 import { addIpcMain } from './main-process/ipcMain'
 import { addShortcut, addUiohook } from './main-process/uiohook'
 
+export async function initElectronApp() {
+  Menu.setApplicationMenu(null)
+
+  createSearchWindow()
+  createSettingWindow()
+
+  createTray()
+  addIpcMain()
+
+  addUiohook()
+  addShortcut()
+}
+
 async function createWindow() {
   const browserWindow = new BrowserWindow({
     show: false, // Use the 'ready-to-show' event to show the instantiated BrowserWindow.
@@ -47,29 +60,4 @@ async function createWindow() {
   await browserWindow.loadURL(pageUrl)
 
   return browserWindow
-}
-
-export async function restoreOrCreateWindow() {
-  Menu.setApplicationMenu(null)
-
-  createSearchWindow()
-  createSettingWindow()
-
-  createTray()
-  addIpcMain()
-
-  addUiohook()
-  addShortcut()
-
-  // let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed())
-
-  // if (window === undefined) {
-  //   window = await createWindow()
-  // }
-
-  // if (window.isMinimized()) {
-  //   window.restore()
-  // }
-
-  // window.focus()
 }

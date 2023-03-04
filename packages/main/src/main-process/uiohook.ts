@@ -1,4 +1,6 @@
+import { exec, execFile } from 'child_process'
 import { BrowserWindow, globalShortcut } from 'electron'
+import path from 'path'
 import { uIOhook, UiohookKey } from 'uiohook-napi'
 
 import { electronWindow } from './electronWindow'
