@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import CircleSearch from './components/CircleSearch'
 import DirSearch from './components/DirSearch'
 import Setting from './components/Setting'
+import Note from './components/Note'
 
 const map = {
   // CircleSearch,
   DirSearch,
-  Setting
+  Setting,
+  Note
 }
 
 const keys = Object.keys(map)

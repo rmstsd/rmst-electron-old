@@ -14,10 +14,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </BrowserRouter>
 )
 
-document.addEventListener('input', evt => {
+document.addEventListener('focusin', evt => {
   const target = evt.target as HTMLElement
 
-  if (target.tagName === 'INPUT') {
+  if (['TEXTAREA', 'INPUT'].includes(target.tagName)) {
     target.setAttribute('spellcheck', 'false')
   }
 })

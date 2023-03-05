@@ -5,6 +5,7 @@ type IElectronWindow = {
   circleWindow: BrowserWindow
   searchWindow: BrowserWindow
   settingWindow: BrowserWindow
+  NoteWindow: BrowserWindow
 }
 export const electronWindow: IElectronWindow = {} as IElectronWindow
 
@@ -95,4 +96,24 @@ export const createSettingWindow = () => {
   loadWindow(win, { ui: 'Setting' })
 
   electronWindow.settingWindow = win
+}
+
+export function createNoteWindow() {
+  const windowOption = {
+    icon: iconPath,
+    skipTaskbar: false,
+    show: false,
+    webPreferences: {
+      preload: preloadPath
+    }
+  }
+
+  const win = new BrowserWindow(windowOption)
+  win.on('close', evt => {
+    evt.preventDefault()
+    win.hide()
+  })
+  loadWindow(win, { ui: 'Note' })
+
+  electronWindow.NoteWindow = win
 }

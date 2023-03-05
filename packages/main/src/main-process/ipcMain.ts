@@ -1,9 +1,10 @@
-import { BrowserWindow, ipcMain, shell } from 'electron'
+import { BrowserWindow, ipcMain, shell, clipboard } from 'electron'
 import fse from 'fs-extra'
 import { spawn } from 'cross-spawn'
 import Store from 'electron-store'
 
 import { electronWindow } from '../main-process/electronWindow'
+import { getContent, updateContent } from './githubApi'
 
 const store = new Store()
 
@@ -25,6 +26,12 @@ export const addIpcMain = () => {
   ipcMain.handle('get-editorPath', () => store.get('editorPath'))
 
   ipcMain.on('clear-ele-store', evt => store.clear())
+
+  ipcMain.handle('get-content', getContent)
+  ipcMain.handle('update-content', (evt, content, sha) => updateContent(content, sha))
+  ipcMain.handle('copy-text', (evt, content) => {
+    clipboard.writeText(content)
+  })
 }
 
 const openSpawnDir = (event, dirPath) => {

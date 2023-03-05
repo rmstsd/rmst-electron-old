@@ -29,12 +29,6 @@ app
   .whenReady()
   .then(() => {
     initElectronApp()
-
-    const keyMapChildProcess = spawn(path.resolve(__dirname, 'keyMap.exe'), [], { windowsHide: true })
-
-    app.on('will-quit', () => {
-      process.kill(keyMapChildProcess.pid)
-    })
   })
   .catch(e => console.error('Failed create window:', e))
 

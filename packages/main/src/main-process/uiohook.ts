@@ -62,4 +62,8 @@ export const addShortcut = () => {
       electronWindow.searchWindow.removeMenu()
     }
   })
+
+  globalShortcut.register('Alt+n', () => {
+    electronWindow.NoteWindow.show()
+  })
 }
