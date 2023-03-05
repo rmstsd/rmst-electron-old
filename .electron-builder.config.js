@@ -16,7 +16,7 @@ module.exports = async function () {
     directories: {
       output: 'dist'
     },
-    asar: false, // 未解决的问题: asar 为true 的时候, swan 会找不到 keyMap.exe
+    // asar: false, // 未解决的问题: asar 为true 的时候, swan 会找不到 keyMap.exe
     win: {
       target: ['msi', 'nsis'],
       icon: 'icon.png'
