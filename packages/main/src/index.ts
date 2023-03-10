@@ -18,6 +18,7 @@ if (!isSingleInstance) {
 //   restoreOrCreateWindow()
 // })
 
+app.setLoginItemSettings({ openAtLogin: true })
 app.disableHardwareAcceleration() // Disable Hardware Acceleration to save more system resources.
 
 // Shout down background process if all windows was closed
