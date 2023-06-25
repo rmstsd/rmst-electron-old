@@ -6,6 +6,8 @@ import { platform } from 'node:process'
 import path from 'node:path'
 import spawn from 'cross-spawn'
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
 // Prevent electron from running multiple instances.
 const isSingleInstance = app.requestSingleInstanceLock()
 if (!isSingleInstance) {
@@ -18,7 +20,6 @@ if (!isSingleInstance) {
 //   restoreOrCreateWindow()
 // })
 
-app.setLoginItemSettings({ openAtLogin: true })
 app.disableHardwareAcceleration() // Disable Hardware Acceleration to save more system resources.
 
 // Shout down background process if all windows was closed
@@ -29,6 +30,10 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    if (!isDevelopment) {
+      launchAtStartup()
+    }
+
     initElectronApp()
   })
   .catch(e => console.error('Failed create window:', e))
@@ -47,8 +52,17 @@ if (import.meta.env.PROD) {
     .whenReady()
     .then(() => import('electron-updater'))
     .then(module => {
-      const autoUpdater = module.autoUpdater || (module.default.autoUpdater as typeof module['autoUpdater'])
+      const autoUpdater = module.autoUpdater || (module.default.autoUpdater as (typeof module)['autoUpdater'])
       return autoUpdater.checkForUpdatesAndNotify()
     })
     .catch(e => console.error('Failed check and install updates:', e))
+}
+
+function launchAtStartup() {
+  if (process.platform === 'darwin') {
+    app.setLoginItemSettings({
+      openAtLogin: true,
+      openAsHidden: true
+    })
+  }
 }
