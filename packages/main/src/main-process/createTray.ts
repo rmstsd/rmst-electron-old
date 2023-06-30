@@ -25,6 +25,13 @@ export const createTray = () => {
         electronWindow.NoteWindow?.show()
       }
     },
+    {
+      label: 'fanYi',
+      type: 'normal',
+      click: (menuItem, browserWindow, event) => {
+        electronWindow.YoudaoTranslateWindow?.show()
+      }
+    },
     { label: '退出', type: 'normal', click: () => process.exit(0) }
   ])
   tray.setToolTip('rmst')

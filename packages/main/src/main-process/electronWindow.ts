@@ -6,6 +6,7 @@ type IElectronWindow = {
   searchWindow: BrowserWindow
   settingWindow: BrowserWindow
   NoteWindow: BrowserWindow
+  YoudaoTranslateWindow: BrowserWindow
 }
 export const electronWindow: IElectronWindow = {} as IElectronWindow
 
@@ -116,4 +117,24 @@ export function createNoteWindow() {
   loadWindow(win, { ui: 'Note' })
 
   electronWindow.NoteWindow = win
+}
+
+export function createYoudaoTranslateWindow() {
+  const windowOption = {
+    icon: iconPath,
+    skipTaskbar: false,
+    show: false,
+    webPreferences: {
+      preload: preloadPath
+    }
+  }
+
+  const win = new BrowserWindow(windowOption)
+  win.on('close', evt => {
+    evt.preventDefault()
+    win.hide()
+  })
+  loadWindow(win, { ui: 'YoudaoTranslate' })
+
+  electronWindow.YoudaoTranslateWindow = win
 }

@@ -1,9 +1,10 @@
 import { exec, execFile } from 'child_process'
-import { BrowserWindow, globalShortcut } from 'electron'
+import { BrowserWindow, screen, globalShortcut } from 'electron'
 import path from 'path'
 import { uIOhook, UiohookKey } from 'uiohook-napi'
 
 import { electronWindow } from './electronWindow'
+import youdaoTranslate from './youDaoApi'
 
 let timer: NodeJS.Timeout
 
@@ -18,6 +19,13 @@ export const addUiohook = () => {
     }
     if (evt.keycode === UiohookKey.Escape) {
       BrowserWindow.getFocusedWindow()?.hide()
+    }
+
+    if (evt.keycode === UiohookKey.F8) {
+      electronWindow.YoudaoTranslateWindow.showInactive()
+      youdaoTranslate('').then(data => {
+        electronWindow.YoudaoTranslateWindow.webContents.send('fanyi-data', data)
+      })
     }
   })
 

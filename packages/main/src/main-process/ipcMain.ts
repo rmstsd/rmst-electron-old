@@ -5,6 +5,7 @@ import Store from 'electron-store'
 
 import { electronWindow } from '../main-process/electronWindow'
 import { getContent, updateContent } from './githubApi'
+import youdaoTranslate from './youDaoApi'
 
 const store = new Store()
 
@@ -32,6 +33,7 @@ export const addIpcMain = () => {
   ipcMain.handle('copy-text', (evt, content) => {
     clipboard.writeText(content)
   })
+  ipcMain.handle('youdao-translate', (evt, word: string) => youdaoTranslate(word))
 }
 
 const openSpawnDir = (event, dirPath) => {

@@ -2,7 +2,12 @@ import { app, BrowserWindow, Menu } from 'electron'
 import { join } from 'node:path'
 import { URL } from 'node:url'
 import { createTray } from './main-process/createTray'
-import { createNoteWindow, createSearchWindow, createSettingWindow } from './main-process/electronWindow'
+import {
+  createNoteWindow,
+  createSearchWindow,
+  createSettingWindow,
+  createYoudaoTranslateWindow
+} from './main-process/electronWindow'
 import { addIpcMain } from './main-process/ipcMain'
 import { addShortcut, addUiohook } from './main-process/uiohook'
 
@@ -12,6 +17,7 @@ export async function initElectronApp() {
   createSearchWindow()
   createSettingWindow()
   createNoteWindow()
+  createYoudaoTranslateWindow()
 
   createTray()
   addIpcMain()

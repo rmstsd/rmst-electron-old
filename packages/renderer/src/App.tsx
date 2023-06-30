@@ -5,12 +5,14 @@ import CircleSearch from './components/CircleSearch'
 import DirSearch from './components/DirSearch'
 import Setting from './components/Setting'
 import Note from './components/Note'
+import YoudaoTranslate from './components/YoudaoTranslate'
 
 const map = {
-  // CircleSearch,
+  CircleSearch,
   DirSearch,
   Setting,
-  Note
+  Note,
+  YoudaoTranslate
 }
 
 const keys = Object.keys(map)
