@@ -1,10 +1,10 @@
 import { Menu, app, Tray } from 'electron'
 
-import { electronWindow, iconPath } from './electronWindow'
+import { electronWindow, trayPath } from './electronWindow'
 
 // 托盘图标
 export const createTray = () => {
-  const tray = new Tray(iconPath)
+  const tray = new Tray(trayPath)
 
   tray.on('click', () => {
     // electronWindow.circleWindow.show()

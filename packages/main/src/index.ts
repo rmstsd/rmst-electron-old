@@ -3,8 +3,6 @@ import './security-restrictions'
 
 import { initElectronApp } from '/@/mainWindow'
 import { platform } from 'node:process'
-import path from 'node:path'
-import spawn from 'cross-spawn'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -59,10 +57,5 @@ if (import.meta.env.PROD) {
 }
 
 function launchAtStartup() {
-  if (process.platform === 'darwin') {
-    app.setLoginItemSettings({
-      openAtLogin: true,
-      openAsHidden: true
-    })
-  }
+  app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true })
 }

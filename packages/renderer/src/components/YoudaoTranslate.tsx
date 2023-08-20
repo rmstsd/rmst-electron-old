@@ -42,17 +42,14 @@ const YoudaoTranslate = () => {
   })
 
   useEffect(() => {
-    console.log('useEffect')
-
-    window.electronAPI.onFanyi((evt, data) => {
-      console.log(data)
-    })
-
-    rmstIpcRenderer.on('fanyi-data', (evt, data) => {
-      console.log('fanyi-data', evt)
-      console.log('fanyi-data', data)
-    })
-
+    // console.log('useEffect')
+    // window.electronAPI.onFanyi((evt, data) => {
+    //   console.log(data)
+    // })
+    // rmstIpcRenderer.on('fanyi-data', (evt, data) => {
+    //   console.log('fanyi-data', evt)
+    //   console.log('fanyi-data', data)
+    // })
     // rmstIpcRenderer.invoke('youdao-translate').then(data => {
     //   setFanYiData(data)
     // })

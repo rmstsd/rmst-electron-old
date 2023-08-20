@@ -8,7 +8,7 @@ const Note = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    getContent()
+    // getContent()
   }, [])
 
   const getContent = () => {

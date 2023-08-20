@@ -14,6 +14,7 @@ const isDev = import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL !== und
 
 const preloadPath = path.join(app.getAppPath(), 'packages/preload/dist/index.cjs')
 export const iconPath = path.resolve(app.getAppPath(), 'icon.png')
+export const trayPath = path.resolve(app.getAppPath(), 'icon.png')
 
 const loadWindow = (win: BrowserWindow, query: Record<string, string>) => {
   const queryString = new URLSearchParams(query).toString()
