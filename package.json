@@ -38,6 +38,7 @@
   "dependencies": {
     "@arco-design/web-react": "^2.40.2",
     "@octokit/core": "^4.2.0",
+    "@types/react-highlight-words": "^0.16.4",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "cross-spawn": "^7.0.3",
@@ -49,6 +50,7 @@
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-highlight-words": "^0.20.0",
     "react-router-dom": "^6.8.1",
     "uiohook-napi": "^1.5.0"
   },

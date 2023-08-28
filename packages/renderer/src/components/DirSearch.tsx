@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Input, Message } from '@arco-design/web-react'
 import path from 'path-browserify'
+import Highlighter from 'react-highlight-words'
 
 import { rmstIpcRenderer } from '#preload'
 import classNames from 'classnames'
@@ -140,7 +141,13 @@ const dirSearch = () => {
               key={index}
               onClick={() => onConfirm(index)}
             >
-              {item}
+              <Highlighter
+                highlightStyle={{ color: '#5454ff' }}
+                highlightTag="b"
+                searchWords={wd.split('')}
+                autoEscape={true}
+                textToHighlight={item}
+              />
             </div>
           ))}
         </section>
@@ -154,13 +161,22 @@ export default dirSearch
 function search(dirNames, wd) {
   const seRes = wd.length
     ? dirNames
-        .filter(item => item.children.some(o => o.toLowerCase().includes(wd.toLowerCase())))
+        .filter(item => item.children.some(o => ssOw(o, wd)))
         .map(item => ({
           ...item,
-          children: item.children.filter(o => o.toLowerCase().includes(wd.toLowerCase()))
+          children: item.children.filter(o => ssOw(o, wd))
         }))
     : []
   const flatRes = seRes.reduce((acc, item) => acc.concat(item.children.map(o => path.join(item.name, o))), [])
 
   return flatRes
+}
+
+function ssOw(originValue: string, wd: string) {
+  const ovs = originValue.toLowerCase().split('')
+  const wds = wd.toLowerCase().split('')
+
+  return wds.every(item => ovs.includes(item))
+
+  return originValue.toLowerCase().includes(wd.toLowerCase())
 }
