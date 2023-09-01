@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Input, Message } from '@arco-design/web-react'
 import path from 'path-browserify'
-import Highlighter from 'react-highlight-words'
 
 import { rmstIpcRenderer } from '#preload'
 import classNames from 'classnames'
@@ -140,14 +139,15 @@ const dirSearch = () => {
               })}
               key={index}
               onClick={() => onConfirm(index)}
+              style={{ fontSize: 16 }}
             >
-              <Highlighter
-                highlightStyle={{ color: '#5454ff' }}
-                highlightTag="b"
-                searchWords={wd.split('')}
-                autoEscape={true}
-                textToHighlight={item}
-              />
+              {findAllChunks(findPosIndexList(wd, item), item).map(chunkItem =>
+                chunkItem.highLight ? (
+                  <b style={{ color: '#5454ff' }}>{item.slice(chunkItem.start, chunkItem.end)}</b>
+                ) : (
+                  <span>{item.slice(chunkItem.start, chunkItem.end)}</span>
+                )
+              )}
             </div>
           ))}
         </section>
@@ -176,7 +176,66 @@ function ssOw(originValue: string, wd: string) {
   const ovs = originValue.toLowerCase().split('')
   const wds = wd.toLowerCase().split('')
 
-  return wds.every(item => ovs.includes(item))
+  return findPosIndexList(wd, originValue).length > 0
 
   return originValue.toLowerCase().includes(wd.toLowerCase())
+}
+
+function findPosIndexList(wd, data): number[] {
+  let pos = []
+
+  const wdArray = wd.split('')
+
+  let dataIndex = 0
+  while (dataIndex < data.length) {
+    if (data.charAt(dataIndex) === wdArray[0]) {
+      pos.push(dataIndex)
+      wdArray.shift()
+    }
+
+    dataIndex++
+  }
+
+  if (wdArray.length !== 0) {
+    pos = []
+  }
+
+  return pos
+}
+
+function findAllChunks(pos, data) {
+  const ans = []
+
+  for (const item of pos) {
+    if (ans.length === 0) {
+      ans.push({ start: item, end: item + 1 })
+    } else {
+      const prev = ans.at(-1)
+
+      if (item === prev.end) {
+        prev.end++
+      } else {
+        ans.push({ start: item, end: item + 1 })
+      }
+    }
+  }
+
+  const allChunks: { start: number; end: number; highLight: boolean }[] = []
+
+  let lastIndex = 0
+  ans.forEach(item => {
+    appendChunk(lastIndex, item.start, false)
+    appendChunk(item.start, item.end, true)
+
+    lastIndex = item.end
+  })
+  appendChunk(lastIndex, data.length, false)
+
+  return allChunks
+
+  function appendChunk(start, end, highLight) {
+    if (end - start > 0) {
+      allChunks.push({ start, end, highLight })
+    }
+  }
 }
