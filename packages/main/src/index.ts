@@ -4,8 +4,6 @@ import './security-restrictions'
 import { initElectronApp } from '/@/mainWindow'
 import { platform } from 'node:process'
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
-
 // Prevent electron from running multiple instances.
 const isSingleInstance = app.requestSingleInstanceLock()
 if (!isSingleInstance) {
@@ -28,7 +26,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    if (!isDevelopment) {
+    if (app.isPackaged) {
       launchAtStartup()
     }
 
@@ -57,5 +55,5 @@ if (import.meta.env.PROD) {
 }
 
 function launchAtStartup() {
-  app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true })
+  app.setLoginItemSettings({ openAtLogin: true })
 }
