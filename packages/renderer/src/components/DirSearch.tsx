@@ -20,7 +20,11 @@ const dirSearch = () => {
     getInitialData()
 
     document.onvisibilitychange = () => {
-      if (document.visibilityState == 'visible') getInitialData()
+      if (document.visibilityState == 'visible') {
+        setIsCmd(false)
+        setWd('')
+        getInitialData()
+      }
     }
 
     const ob = new ResizeObserver(() => {
