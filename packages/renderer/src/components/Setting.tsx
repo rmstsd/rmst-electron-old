@@ -5,6 +5,7 @@ import { rmstIpcRenderer } from '#preload'
 
 const Setting = () => {
   const [editorPath, setEditorPath] = useState<string>('')
+  const [cmdPath, setCmdPath] = useState<string>('')
   const [dirPaths, setDirPaths] = useState<string[]>([])
 
   const saveSet = () => {
@@ -14,6 +15,7 @@ const Setting = () => {
     }
 
     rmstIpcRenderer.send('set-editorPath', editorPath)
+    rmstIpcRenderer.send('set-cmdPath', cmdPath)
     rmstIpcRenderer.send('set-dirPaths', dirPaths)
 
     Message.success('保存成功')
@@ -22,6 +24,9 @@ const Setting = () => {
   useEffect(() => {
     rmstIpcRenderer.invoke('get-editorPath').then(data => {
       if (data) setEditorPath(data)
+    })
+    rmstIpcRenderer.invoke('get-cmdPath').then(data => {
+      if (data) setCmdPath(data)
     })
     rmstIpcRenderer.invoke('get-dirPaths').then(data => {
       if (Array.isArray(data) && data.length) setDirPaths(data)
@@ -46,12 +51,21 @@ const Setting = () => {
         onChange={setEditorPath}
       />
 
+      <h3>cmd Path</h3>
+      <Input
+        placeholder="例如: D:\WindowsTerminal\wt.exe"
+        value={cmdPath}
+        style={{ width: 400 }}
+        onChange={setCmdPath}
+      />
+
       <h3>
         项目所在的目录
         <span style={{ fontWeight: 'normal', marginLeft: 10 }}>
           (如果你的所有项目都在 E:\project 下 则可以填写 E:\project)
         </span>{' '}
       </h3>
+
       {dirPaths.map((item, index) => (
         <Space key={index} style={{ display: 'flex', marginBottom: 10 }}>
           <span>{index + 1}:</span>
@@ -75,13 +89,10 @@ const Setting = () => {
           </Button>
         </Space>
       ))}
-
       <Button onClick={() => setDirPaths(dirPaths.concat(''))} style={{ marginBottom: 5 }}>
         + 添加一个目录
       </Button>
-
       <Divider />
-
       <div style={{ display: 'flex', gap: 10 }}>
         <Button type="primary" onClick={saveSet} style={{ flexGrow: 1 }}>
           保存

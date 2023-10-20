@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Input, Message } from '@arco-design/web-react'
+import { Button, Input, Message } from '@arco-design/web-react'
 import path from 'path-browserify'
 
 import { rmstIpcRenderer } from '#preload'
@@ -12,6 +12,7 @@ const dirSearch = () => {
   const [wd, setWd] = useState('')
   const [dirNamesTree, setDirNamesTree] = useState<any[]>([])
   const [selectIndex, setSelectIndex] = useState(0)
+  const [isCmd, setIsCmd] = useState(false)
 
   const inputRef = useRef(null)
 
@@ -69,14 +70,18 @@ const dirSearch = () => {
     const projectPath = flatDirNames[index]
     if (!projectPath) return
 
-    rmstIpcRenderer.send('spawn-open-dir', projectPath)
+    if (isCmd) {
+      rmstIpcRenderer.send('node-cmd-dir', projectPath)
+    } else {
+      rmstIpcRenderer.send('spawn-open-dir', projectPath)
+    }
     rmstIpcRenderer.send('hide-focused-win')
 
     setWd('')
     setSelectIndex(0)
   }
 
-  const onKeyDown = (evt: React.KeyboardEvent) => {
+  const onKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (['ArrowUp', 'ArrowDown'].includes(evt.code)) {
       evt.preventDefault()
 
@@ -88,6 +93,16 @@ const dirSearch = () => {
         const nv = selectIndex + 1
         setSelectIndex(nv > flatDirNames.length - 1 ? 0 : nv)
       }
+    }
+    if (evt.code === 'ArrowRight') {
+      const target = evt.target as HTMLInputElement
+
+      if (target.selectionEnd === target.selectionStart && target.selectionEnd === wd.length) {
+        setIsCmd(true)
+      }
+    }
+    if (evt.code === 'ArrowLeft') {
+      setIsCmd(false)
     }
   }
 
@@ -139,15 +154,19 @@ const dirSearch = () => {
               })}
               key={index}
               onClick={() => onConfirm(index)}
-              style={{ fontSize: 16 }}
+              style={{ fontSize: 16, display: 'flex', justifyContent: 'space-between' }}
             >
-              {findAllChunks(findPosIndexList(wd, item), item).map(chunkItem =>
-                chunkItem.highLight ? (
-                  <b style={{ color: '#5454ff' }}>{item.slice(chunkItem.start, chunkItem.end)}</b>
-                ) : (
-                  <span>{item.slice(chunkItem.start, chunkItem.end)}</span>
-                )
-              )}
+              <span>
+                {findAllChunks(findPosIndexList(wd, item), item).map(chunkItem =>
+                  chunkItem.highLight ? (
+                    <b style={{ color: '#5454ff' }}>{item.slice(chunkItem.start, chunkItem.end)}</b>
+                  ) : (
+                    <span>{item.slice(chunkItem.start, chunkItem.end)}</span>
+                  )
+                )}
+              </span>
+
+              <Button type={isCmd && selectIndex === index ? 'primary' : 'outline'}>cmd</Button>
             </div>
           ))}
         </section>

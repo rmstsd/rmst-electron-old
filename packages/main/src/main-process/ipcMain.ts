@@ -1,6 +1,7 @@
 import { BrowserWindow, ipcMain, shell, clipboard } from 'electron'
 import fse from 'fs-extra'
 import { spawn } from 'cross-spawn'
+import cmd from 'node-cmd'
 import Store from 'electron-store'
 
 import { electronWindow } from '../main-process/electronWindow'
@@ -16,15 +17,19 @@ export const addIpcMain = () => {
 
   ipcMain.on('spawn-open-dir', openSpawnDir)
 
+  ipcMain.on('node-cmd-dir', nodeCmdDir)
+
   ipcMain.on('set-dir-win-size', setDirWinSize)
 
   ipcMain.handle('project-names-tree', getProjectNamesTree)
 
   ipcMain.on('set-dirPaths', (evt, value) => store.set('dirNames', value))
   ipcMain.on('set-editorPath', (evt, value) => store.set('editorPath', value))
+  ipcMain.on('set-cmdPath', (evt, value) => store.set('cmdPath', value))
 
   ipcMain.handle('get-dirPaths', () => store.get('dirNames'))
   ipcMain.handle('get-editorPath', () => store.get('editorPath'))
+  ipcMain.handle('get-cmdPath', () => store.get('cmdPath'))
 
   ipcMain.on('clear-ele-store', evt => store.clear())
 
@@ -42,6 +47,15 @@ const openSpawnDir = (event, dirPath) => {
     return
   }
   spawn(editorPath, [dirPath], { detached: true })
+}
+
+const nodeCmdDir = (event, dirPath) => {
+  const cmdPath = store.get('cmdPath') as string
+  if (!cmdPath) {
+    return
+  }
+
+  cmd.runSync(`D:\\WindowsTerminal\\wt.exe -d ${dirPath}`)
 }
 
 const setDirWinSize = (evt, value) => {
