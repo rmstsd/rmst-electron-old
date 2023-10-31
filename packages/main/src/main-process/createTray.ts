@@ -18,20 +18,20 @@ export const createTray = () => {
         electronWindow.settingWindow?.show()
       }
     },
-    {
-      label: 'note',
-      type: 'normal',
-      click: (menuItem, browserWindow, event) => {
-        electronWindow.NoteWindow?.show()
-      }
-    },
-    {
-      label: 'fanYi',
-      type: 'normal',
-      click: (menuItem, browserWindow, event) => {
-        electronWindow.YoudaoTranslateWindow?.show()
-      }
-    },
+    // {
+    //   label: 'note',
+    //   type: 'normal',
+    //   click: (menuItem, browserWindow, event) => {
+    //     electronWindow.NoteWindow?.show()
+    //   }
+    // },
+    // {
+    //   label: 'fanYi',
+    //   type: 'normal',
+    //   click: (menuItem, browserWindow, event) => {
+    //     electronWindow.YoudaoTranslateWindow?.show()
+    //   }
+    // },
     { label: '退出', type: 'normal', click: () => process.exit(0) }
   ])
   tray.setToolTip('rmst')

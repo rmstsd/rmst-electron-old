@@ -8,11 +8,11 @@ import Note from './components/Note'
 import YoudaoTranslate from './components/YoudaoTranslate'
 
 const map = {
-  CircleSearch,
+  // CircleSearch,
   DirSearch,
-  Setting,
-  Note,
-  YoudaoTranslate
+  Setting
+  // Note,
+  // YoudaoTranslate
 }
 
 const keys = Object.keys(map)
