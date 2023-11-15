@@ -21,17 +21,17 @@ export const addUiohook = () => {
       BrowserWindow.getFocusedWindow()?.hide()
     }
 
-    if (evt.keycode === UiohookKey.F8) {
-      electronWindow.YoudaoTranslateWindow.showInactive()
-      youdaoTranslate('').then(data => {
-        electronWindow.YoudaoTranslateWindow.webContents.send('fanyi-data', data)
-      })
-    }
+    // if (evt.keycode === UiohookKey.F8) {
+    //   electronWindow.YoudaoTranslateWindow.showInactive()
+    //   youdaoTranslate('').then(data => {
+    //     electronWindow.YoudaoTranslateWindow.webContents.send('fanyi-data', data)
+    //   })
+    // }
   })
 
-  uIOhook.on('mousemove', () => {
-    clearTimeout(timer)
-  })
+  // uIOhook.on('mousemove', () => {
+  //   clearTimeout(timer)
+  // })
 
   // evt.button  1: 左键 2: 右键
   // uIOhook.on('mousedown', evt => {
@@ -53,9 +53,9 @@ export const addUiohook = () => {
   //   }
   // })
 
-  uIOhook.on('mouseup', () => {
-    clearTimeout(timer)
-  })
+  // uIOhook.on('mouseup', () => {
+  //   clearTimeout(timer)
+  // })
 
   uIOhook.start()
 }

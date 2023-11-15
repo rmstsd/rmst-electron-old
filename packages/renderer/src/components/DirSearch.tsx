@@ -7,10 +7,15 @@ import classNames from 'classnames'
 
 import { defaultList } from '../utils'
 
+interface DirNamesTree {
+  name: string
+  children: string[]
+}
+
 const dirSearch = () => {
   const [isCanOpenDir, setIsCanOpenDir] = useState(false)
   const [wd, setWd] = useState('')
-  const [dirNamesTree, setDirNamesTree] = useState<any[]>([])
+  const [dirNamesTree, setDirNamesTree] = useState<DirNamesTree[]>([])
   const [selectIndex, setSelectIndex] = useState(0)
   const [isCmd, setIsCmd] = useState(false)
 
@@ -42,6 +47,7 @@ const dirSearch = () => {
     inputRef.current.dom.focus()
 
     rmstIpcRenderer.invoke('project-names-tree').then(data => {
+      console.log(data)
       Array.isArray(data) && setDirNamesTree(data)
     })
 
@@ -53,36 +59,38 @@ const dirSearch = () => {
     )
   }
 
-  const onConfirm = index => {
+  const onConfirm = (projectPath: string) => {
     if (searchUrl) {
       rmstIpcRenderer.send('open-external', searchUrl)
-      rmstIpcRenderer.send('hide-focused-win')
+      hideFocusedWin()
 
       setWd('')
       return
     }
 
     if (!isCanOpenDir) {
-      Message.info({
-        content: '请先点击托盘右键设置 编辑器路径 和 项目目录',
-        style: { top: -35 },
-        id: 'only-info'
-      })
+      Message.info({ content: '请先点击托盘右键设置 编辑器路径,项目目录', style: { top: -35 }, id: 'o' })
       return
     }
 
-    const projectPath = flatDirNames[index]
-    if (!projectPath) return
-
     if (isCmd) {
-      rmstIpcRenderer.send('node-cmd-dir', projectPath)
+      openWithCmd(projectPath)
     } else {
       rmstIpcRenderer.send('spawn-open-dir', projectPath)
     }
-    rmstIpcRenderer.send('hide-focused-win')
+    hideFocusedWin()
 
     setWd('')
     setSelectIndex(0)
+  }
+
+  const openWithCmd = (projectPath: string) => {
+    rmstIpcRenderer.send('node-cmd-dir', projectPath)
+    hideFocusedWin()
+  }
+
+  function hideFocusedWin() {
+    rmstIpcRenderer.send('hide-focused-win')
   }
 
   const onKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -141,7 +149,7 @@ const dirSearch = () => {
             setSelectIndex(0)
             setWd(value)
           }}
-          onPressEnter={() => onConfirm(selectIndex)}
+          onPressEnter={() => onConfirm(flatDirNames[selectIndex])}
           style={{ height: 60, borderRadius: 0, fontSize: 18, borderColor: 'transparent' }}
           className="s-input"
           onKeyDown={onKeyDown}
@@ -157,7 +165,7 @@ const dirSearch = () => {
                 'arco-select-option-hover': selectIndex === index
               })}
               key={index}
-              onClick={() => onConfirm(index)}
+              onClick={() => onConfirm(item)}
               style={{ fontSize: 16, display: 'flex', justifyContent: 'space-between' }}
             >
               <span>
@@ -170,7 +178,15 @@ const dirSearch = () => {
                 )}
               </span>
 
-              <Button type={isCmd && selectIndex === index ? 'primary' : 'outline'}>cmd</Button>
+              <Button
+                type={isCmd && selectIndex === index ? 'primary' : 'outline'}
+                onClick={evt => {
+                  evt.stopPropagation()
+                  openWithCmd(item)
+                }}
+              >
+                cmd
+              </Button>
             </div>
           ))}
         </section>
@@ -181,7 +197,7 @@ const dirSearch = () => {
 
 export default dirSearch
 
-function search(dirNames, wd) {
+function search(dirNames: DirNamesTree[], wd: string) {
   const seRes = wd.length
     ? dirNames
         .filter(item => item.children.some(o => ssOw(o, wd)))
@@ -190,7 +206,10 @@ function search(dirNames, wd) {
           children: item.children.filter(o => ssOw(o, wd))
         }))
     : []
-  const flatRes = seRes.reduce((acc, item) => acc.concat(item.children.map(o => path.join(item.name, o))), [])
+  const flatRes = seRes.reduce<string[]>(
+    (acc, item) => acc.concat(item.children.map(o => path.join(item.name, o))),
+    []
+  )
 
   return flatRes
 }

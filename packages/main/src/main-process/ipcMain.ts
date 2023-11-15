@@ -55,7 +55,7 @@ const nodeCmdDir = (event, dirPath) => {
     return
   }
 
-  cmd.runSync(`D:\\WindowsTerminal\\wt.exe -d ${dirPath}`)
+  cmd.runSync(`${cmdPath} -d ${dirPath}`)
 }
 
 const setDirWinSize = (evt, value) => {
