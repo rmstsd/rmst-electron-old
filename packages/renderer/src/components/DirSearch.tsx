@@ -76,15 +76,21 @@ const dirSearch = () => {
     if (isCmd) {
       openWithCmd(projectPath)
     } else {
+      if (!projectPath) {
+        return
+      }
       rmstIpcRenderer.send('spawn-open-dir', projectPath)
+      hideFocusedWin()
     }
-    hideFocusedWin()
 
     setWd('')
     setSelectIndex(0)
   }
 
   const openWithCmd = (projectPath: string) => {
+    if (!projectPath) {
+      return
+    }
     rmstIpcRenderer.send('node-cmd-dir', projectPath)
     hideFocusedWin()
   }
