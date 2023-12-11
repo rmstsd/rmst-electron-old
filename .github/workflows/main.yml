@@ -2,7 +2,9 @@ on:
   push:
     branches:
     - master
-      jobs:
-        j1:
-          run:|
-            npm -v
+jobs:
+  j1:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: nnnnnn
+        run: npm -v
