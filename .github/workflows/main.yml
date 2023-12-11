@@ -2,5 +2,6 @@ on:
   push:
     branches:
     - master
+      jobs
       run:|
       npm -v
