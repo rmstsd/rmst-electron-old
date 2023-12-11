@@ -2,6 +2,7 @@ on:
   push:
     branches:
     - master
-      jobs
-      run:|
-      npm -v
+      jobs:
+        j1:
+          run:|
+            npm -v
