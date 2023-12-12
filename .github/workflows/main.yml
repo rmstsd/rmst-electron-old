@@ -32,9 +32,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # 上传URL为创建GitHub Release步骤的输出值，可通过配置的id获取
+          # 上传URL为 创建GitHub Release 步骤的输出值，可通过配置的 id 获取
           upload_url: ${{ steps.create_release_rmst.outputs.upload_url }}
           # 上传文件信息
           asset_path: ./dist
           asset_name: dist
-          # asset_content_type: application/js
+          asset_content_type: application/zip
