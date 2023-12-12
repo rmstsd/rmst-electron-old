@@ -22,9 +22,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # 标签名
-          tag_name: v${{ steps.version.outputs.value }}
+          tag_name: ${{ github.ref }}
           # release名
-          release_name: v${{ steps.version.outputs.value }}
+          # release_name: v${{ steps.version.outputs.value }}
 
       - name: 上传 Release dist
         id: upload-release-asset
