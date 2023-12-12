@@ -18,7 +18,7 @@ jobs:
         id: create_release_rmst
         uses: actions/create-release@latest
         env:
-          # 配置github token  （这个无需去github配置，默认存在的）
+          # 配置github token  （这个无需去github配置，默认存在的 ）
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # 标签名
