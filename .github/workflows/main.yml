@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 'latest'
       - run: npm i
-      - run: npm run build
+      - run: npm run electron-build
 
       - name: 创建 GitHub Release
         id: create_release_rmst
@@ -22,9 +22,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # 标签名
-          tag_name: v0.1.1
+          tag_name: v0.1.2
           # release名
-          # release_name: v0.1.1
+          # release_name: v0.1.2
 
       - name: 上传 Release dist
         id: upload-release-asset
@@ -35,6 +35,6 @@ jobs:
           # 上传URL为 创建GitHub Release 步骤的输出值，可通过配置的 id 获取
           upload_url: ${{ steps.create_release_rmst.outputs.upload_url }}
           # 上传文件信息
-          asset_path: dist
+          asset_path: ./dist
           asset_name: dist
           asset_content_type: application/zip
