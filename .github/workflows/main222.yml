@@ -1,6 +1,3 @@
-# 这定义工作流的名称，它将显示在 GitHub 存储库的“操作”选项卡中。
-name: Check all English links
-
 # Defines the `workflow_dispatch` and `scheduled` as triggers for the workflow.
 #
 # The `workflow_dispatch` event lets you manually run this workflow from the UI. For more information, see [`workflow_dispatch`](/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch).
