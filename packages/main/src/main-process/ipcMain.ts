@@ -8,6 +8,8 @@ import { electronWindow } from '../main-process/electronWindow'
 import { getContent, updateContent } from './githubApi'
 import youdaoTranslate from './youDaoApi'
 
+import { Key, keyboard } from '@nut-tree/nut-js'
+
 const store = new Store()
 
 export const addIpcMain = () => {
@@ -31,6 +33,11 @@ export const addIpcMain = () => {
   ipcMain.handle('get-editorPath', () => store.get('editorPath'))
   ipcMain.handle('get-cmdPath', () => store.get('cmdPath'))
 
+  // test
+  ipcMain.handle('test-handle', () => {
+    electronWindow.NumWindow.hide()
+  })
+
   ipcMain.on('clear-ele-store', evt => store.clear())
 
   ipcMain.handle('get-content', getContent)
@@ -39,6 +46,31 @@ export const addIpcMain = () => {
     clipboard.writeText(content)
   })
   ipcMain.handle('youdao-translate', (evt, word: string) => youdaoTranslate(word))
+
+  ipcMain.on('set-num-win-size', (evt, value) => {
+    electronWindow.NumWindow.setBounds({ height: value })
+  })
+
+  ipcMain.on('press-char', (evt, value) => {
+    console.log(value)
+
+    if (value === 'enter') {
+      keyboard.pressKey(Key.Enter)
+
+      return
+    }
+
+    if (value === '.') {
+      keyboard.type(Key.Minus)
+      return
+    }
+
+    keyboard.type(value)
+  })
+
+  ipcMain.on('press-char-rrr ', (evt, value) => {
+    console.log('hh', value)
+  })
 }
 
 const openSpawnDir = (event, dirPath) => {

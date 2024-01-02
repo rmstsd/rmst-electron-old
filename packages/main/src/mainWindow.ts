@@ -4,9 +4,9 @@ import { URL } from 'node:url'
 import { createTray } from './main-process/createTray'
 import {
   createNoteWindow,
+  createNumWindow,
   createSearchWindow,
-  createSettingWindow,
-  createYoudaoTranslateWindow
+  createSettingWindow
 } from './main-process/electronWindow'
 import { addIpcMain } from './main-process/ipcMain'
 import { addShortcut, addUiohook } from './main-process/uiohook'
@@ -17,7 +17,8 @@ export async function initElectronApp() {
   createSearchWindow()
   createSettingWindow()
   createNoteWindow()
-  createYoudaoTranslateWindow()
+
+  createNumWindow()
 
   createTray()
   addIpcMain()

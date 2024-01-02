@@ -1,18 +1,13 @@
 import { Button, Divider, Popover, Space } from '@arco-design/web-react'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CircleSearch from './components/CircleSearch'
 import DirSearch from './components/DirSearch'
 import Setting from './components/Setting'
-import Note from './components/Note'
-import YoudaoTranslate from './components/YoudaoTranslate'
+import Num from './components/Num'
 
 const map = {
-  // CircleSearch,
   DirSearch,
-  Setting
-  // Note,
-  // YoudaoTranslate
+  Setting,
+  Num
 }
 
 const keys = Object.keys(map)

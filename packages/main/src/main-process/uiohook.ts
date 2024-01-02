@@ -1,12 +1,7 @@
-import { exec, execFile } from 'child_process'
 import { BrowserWindow, screen, globalShortcut } from 'electron'
-import path from 'path'
 import { uIOhook, UiohookKey } from 'uiohook-napi'
 
 import { electronWindow } from './electronWindow'
-import youdaoTranslate from './youDaoApi'
-
-let timer: NodeJS.Timeout
 
 // 全局鼠标事件
 export const addUiohook = () => {
@@ -72,6 +67,10 @@ export const addShortcut = () => {
   })
 
   globalShortcut.register('Alt+n', () => {
-    electronWindow.NoteWindow.show()
+    if (electronWindow.NumWindow.isVisible()) {
+      electronWindow.NumWindow.hide()
+    } else {
+      electronWindow.NumWindow.show()
+    }
   })
 }

@@ -212,10 +212,7 @@ function search(dirNames: DirNamesTree[], wd: string) {
           children: item.children.filter(o => ssOw(o, wd))
         }))
     : []
-  const flatRes = seRes.reduce<string[]>(
-    (acc, item) => acc.concat(item.children.map(o => path.join(item.name, o))),
-    []
-  )
+  const flatRes = seRes.reduce<string[]>((acc, item) => acc.concat(item.children.map(o => path.join(item.name, o))), [])
 
   return flatRes
 }
